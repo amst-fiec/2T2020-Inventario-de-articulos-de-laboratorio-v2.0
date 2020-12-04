@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Lab Stock</string>
+    <string name="preference">userData</string>
 </resources>

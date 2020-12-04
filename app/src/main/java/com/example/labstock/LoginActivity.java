@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
-    private  Context context;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,14 +120,21 @@ public class LoginActivity extends AppCompatActivity {
                 info_user.put("user_phone", "No tiene numero celular registrado");
             }
 
-
-            finish();
+            saveUser(user.getUid());
             Intent intent = new Intent(this, MenuActivity.class);
             intent.putExtra("info_user", info_user);
             startActivity(intent);
+            finish();
 
         } else {
             System.out.println("sin registrarse");
         }
+    }
+
+    public void saveUser(String userId) {
+
+        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.preference), MODE_PRIVATE).edit();
+        editor.putString("userId", userId);
+        editor.apply();
     }
 }

@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,11 +21,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         context = getApplicationContext();
+        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference), MODE_PRIVATE);
+        String userId = prefs.getString("userId", null);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(context, LoginActivity.class);
+                Intent intent;
+                if (userId == null) {
+                    intent = new Intent(context, LoginActivity.class);
+                } else {
+                    intent = new Intent(context, MenuActivity.class);
+                }
                 startActivity(intent);
                 finish();
             }
