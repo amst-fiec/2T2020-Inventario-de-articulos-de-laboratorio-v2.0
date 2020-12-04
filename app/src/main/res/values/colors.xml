@@ -8,4 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="miBlue">#003049</color>
+    <color name="miOk">#04BB44</color>
+    <color name="miWarning">#EEC415</color>
+    <color name="miDanger">#BF2432</color>
 </resources>
