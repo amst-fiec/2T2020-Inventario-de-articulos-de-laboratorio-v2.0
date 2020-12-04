@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LabStock">
         <activity android:name=".LoginActivity"></activity>
-        <activity android:name=".menu" />
+        <activity android:name=".MenuActivity" />
         <activity android:name=".registroEquipo" />
         <activity
             android:name=".MainActivity"
