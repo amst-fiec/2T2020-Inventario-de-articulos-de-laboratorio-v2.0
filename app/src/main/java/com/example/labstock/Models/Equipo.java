@@ -1,4 +1,4 @@
-package com.example.labstock;
+package com.example.labstock.Models;
 
 public class Equipo {
     private String nombre;
