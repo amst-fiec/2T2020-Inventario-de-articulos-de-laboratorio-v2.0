@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "914281181959",
+    "project_id": "amst-proyecto",
+    "storage_bucket": "amst-proyecto.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914281181959:android:ce2ac7956483dd4fe0cba2",
+        "android_client_info": {
+          "package_name": "com.example.labstock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914281181959-2pvs9ines3v591aq2m69i9cdu72me2ma.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.labstock",
+            "certificate_hash": "4057179d065f539fea2be3f88d91515b0a5f5ce5"
+          }
+        },
+        {
+          "client_id": "914281181959-53tt9v6kht1megqhrajph60mddopv6pu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHDQr3w78loLkuJtGkmCgqFbCjfMga364"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914281181959-53tt9v6kht1megqhrajph60mddopv6pu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
