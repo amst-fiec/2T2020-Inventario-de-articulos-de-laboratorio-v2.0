@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LabStock">
-        <activity android:name=".EquipoActivity"></activity>
+        <activity android:name=".registro_laboratorio"></activity>
+        <activity android:name=".EquipoActivity" />
         <activity android:name=".EquiposActivity" />
         <activity android:name=".LaboratoriosActivity" />
         <activity android:name=".LoginActivity" />
