@@ -23,4 +23,10 @@ public class LaboratoriosActivity extends AppCompatActivity {
         Intent intent = new Intent(context, EquiposActivity.class);
         startActivity(intent);
     }
+
+    //Crear laboratorio formulario
+    public void crearLab(View view) {
+        Intent intent = new Intent(context, registro_laboratorio.class);
+        startActivity(intent);
+    }
 }
