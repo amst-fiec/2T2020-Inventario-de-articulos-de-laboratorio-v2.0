@@ -15,6 +15,7 @@
         android:clickable="true"
         android:contentDescription="Agregar"
         android:focusable="true"
+        android:onClick="crearEquipo"
         android:tooltipText="Agregar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
