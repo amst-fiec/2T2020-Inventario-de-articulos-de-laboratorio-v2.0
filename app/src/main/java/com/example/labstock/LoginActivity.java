@@ -1,10 +1,14 @@
 package com.example.labstock;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +27,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.HashMap;
 
+import static Helpers.NotificationHelper.CANAL_1_ID;
+
 public class LoginActivity extends AppCompatActivity {
 
     //public
@@ -30,12 +36,15 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
-    private Context context;
+
+    private Context context=this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        context = getApplicationContext();
+
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -58,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
     }
