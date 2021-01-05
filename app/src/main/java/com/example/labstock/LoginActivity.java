@@ -90,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (account != null) firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 Log.w("TAG", "Fallo el inicio de sesión con google.", e);
+                Toast.makeText(context, "Fallo el inicio de sesión con google", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -112,39 +113,40 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            String photo = String.valueOf(user.getPhotoUrl());
+            //String name = user.getDisplayName();
+            //String email = user.getEmail();
+            //String photo = String.valueOf(user.getPhotoUrl());
 
-            Toast.makeText(context, "Bienvenido " + name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Bienvenido " +  user.getDisplayName(), Toast.LENGTH_SHORT).show();
 
-            HashMap<String, String> info_user = new HashMap<String, String>();
-            info_user.put("user_name", user.getDisplayName());
-            info_user.put("user_email", user.getEmail());
-            info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
-            info_user.put("user_id", user.getUid());
-
-            if (user.getPhoneNumber() != null) {
-                info_user.put("user_phone", user.getPhoneNumber());
-            } else {
-                info_user.put("user_phone", "No tiene numero celular registrado");
-            }
+//            HashMap<String, String> info_user = new HashMap<String, String>();
+//            info_user.put("user_name", user.getDisplayName());
+//            info_user.put("user_email", user.getEmail());
+//            info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
+//            info_user.put("user_id", user.getUid());
+//
+//            if (user.getPhoneNumber() != null) {
+//                info_user.put("user_phone", user.getPhoneNumber());
+//            } else {
+//                info_user.put("user_phone", "No tiene numero celular registrado");
+//            }
 
             saveUser(user.getUid());
             Intent intent = new Intent(this, MenuActivity.class);
-            intent.putExtra("info_user", info_user);
+            //intent.putExtra("info_user", info_user);
             startActivity(intent);
             finish();
 
         } else {
             System.out.println("sin registrarse");
+            Toast.makeText(context, "Usuario no Registrado", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void saveUser(String userId) {
 
-        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.preference), MODE_PRIVATE).edit();
-        editor.putString("userId", userId);
-        editor.apply();
+//        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.preference), MODE_PRIVATE).edit();
+//        editor.putString("userId", userId);
+//        editor.apply();
     }
 }

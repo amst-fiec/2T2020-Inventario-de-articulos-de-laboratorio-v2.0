@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import static Helpers.NotificationHelper.CANAL_1_ID;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,14 +24,21 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     // Splash Screen Timer
     private final int SPLASH_TIME_OUT = 2500;
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
-        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference), MODE_PRIVATE);
-        String userId = prefs.getString("userId", null);
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        FirebaseUser user = mAuth.getCurrentUser();
+
+//        SharedPreferences prefs = getSharedPreferences(getString(R.string.preference), MODE_PRIVATE);
+//        String userId = prefs.getString("userId", null);
 
 
 
@@ -37,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent;
-                if (userId == null) {
+                if (user == null) {
                     intent = new Intent(context, LoginActivity.class);
                 } else {
                     intent = new Intent(context, MenuActivity.class);
