@@ -22,7 +22,7 @@ public class EquiposActivity extends AppCompatActivity {
 
     //Equipo ejemplo
     public void equipo(View view) {
-        Intent intent = new Intent(context, Equipo.class);
+        Intent intent = new Intent(context, EquipoActivity.class);
         startActivity(intent);
     }
 

@@ -18,6 +18,7 @@
         android:tooltipText="Agregar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:onClick="crearLab"
         app:srcCompat="@drawable/ic_add" />
 
     <LinearLayout
@@ -42,18 +43,6 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <Button
-
-            android:id="@+id/crearLab"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/btn_active"
-            android:onClick="crearLab"
-            android:text="Crear laboratorio"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
 
     </LinearLayout>
 
