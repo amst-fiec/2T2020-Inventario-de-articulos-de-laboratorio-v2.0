@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.labstock.Models.Equipo;
-
 public class EquiposActivity extends AppCompatActivity {
 
     private Context context;
