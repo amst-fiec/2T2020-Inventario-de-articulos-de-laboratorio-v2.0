@@ -19,6 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.HashMap;
+
 import static Helpers.NotificationHelper.CANAL_1_ID;
 
 public class MenuActivity extends AppCompatActivity {
@@ -83,6 +85,26 @@ public class MenuActivity extends AppCompatActivity {
                 });
 
 
+    }
+
+    public void profile(View view){
+
+        HashMap<String, String> info_user = new HashMap<String, String>();
+        info_user.put("user_name", user.getDisplayName());
+        info_user.put("user_email", user.getEmail());
+        info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
+
+
+        if(user.getPhoneNumber()!=null){
+            info_user.put("user_phone",user.getPhoneNumber());
+        }
+        else{
+            info_user.put("user_phone","No tiene numero registrado");
+        }
+
+        Intent intent=new Intent(context,PerfilActivity.class);
+        intent.putExtra("info_user", info_user);
+        startActivity(intent);
     }
 
     public void deleteUser() {

@@ -46,13 +46,15 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
     implementation 'com.google.firebase:firebase-database:19.5.1'
 
-        // Import the BoM for the Firebase platform
-        implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
 
-        // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
-        // When using the BoM, you don't specify versions in Firebase library dependencies
-        implementation 'com.google.firebase:firebase-messaging'
-        implementation 'com.google.firebase:firebase-analytics'
+    //Use library for image
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     
 }
 apply plugin: 'com.google.gms.google-services'
