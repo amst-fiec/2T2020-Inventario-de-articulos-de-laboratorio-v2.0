@@ -17,21 +17,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-/**
- * NOTE: There can only be one service in each app that receives FCM messages. If multiple
- * are declared in the Manifest then the first one will be chosen.
- *
- * In order to make this Java sample functional, you must remove the following from the Kotlin messaging
- * service in the AndroidManifest.xml:
- *
- * <intent-filter>
- *   <action android:name="com.google.firebase.MESSAGING_EVENT" />
- * </intent-filter>
- */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-
     private static final String TAG = "MyFirebaseMsgService";
-
     /**
      * Called when message is received.
      *
@@ -80,22 +67,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // FCM registration token to your app server.
         sendRegistrationToServer(token);
     }
-    // [END on_new_token]
 
-    /**
-     * Schedule async work using WorkManager.
-     */
-    /**private void scheduleJob() {
-     // [START dispatch_job]
-     OneTimeWorkRequest work = new OneTimeWorkRequest.Builder(MyWorker.class)
-     .build();
-     WorkManager.getInstance().beginWith(work).enqueue();
-     // [END dispatch_job]
-     }
-
-     /**
-     * Handle time allotted to BroadcastReceivers.
-     */
     private void handleNow() {
         Log.d(TAG, "Short lived task is done.");
     }
