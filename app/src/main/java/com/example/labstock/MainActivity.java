@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     // Splash Screen Timer
     private final int SPLASH_TIME_OUT = 2500;
-    private FirebaseAuth mAuth;
+
 
 
     @Override
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = getApplicationContext();
         // Initialize Firebase Auth
+        FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
 
         FirebaseUser user = mAuth.getCurrentUser();

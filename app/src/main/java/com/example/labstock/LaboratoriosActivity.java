@@ -32,7 +32,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
 
     private Context context;
     private DatabaseReference db_reference;
-    private FirebaseAuth mAuth;
+
 
   private FirebaseUser user;
 
@@ -45,6 +45,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
         db_reference = FirebaseDatabase.getInstance().getReference().child("users");
 
         // Initialize Firebase Auth
+        FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
 
         user = mAuth.getCurrentUser();
@@ -105,6 +106,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
         button.setText(laboratorio.get("nombre").toString());
         button.setOnClickListener(view -> {
         Intent intent=new Intent(context, EquiposActivity.class);
+        //intent.putExtra("data",(Map)laboratorio);
         startActivity(intent);
 
         });

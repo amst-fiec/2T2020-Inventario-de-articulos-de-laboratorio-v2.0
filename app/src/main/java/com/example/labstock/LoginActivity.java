@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
 //                info_user.put("user_phone", "No tiene numero celular registrado");
 //            }
 
-            saveUser(user.getUid());
+
             Intent intent = new Intent(this, MenuActivity.class);
             //intent.putExtra("info_user", info_user);
             startActivity(intent);
@@ -143,10 +143,5 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void saveUser(String userId) {
 
-//        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.preference), MODE_PRIVATE).edit();
-//        editor.putString("userId", userId);
-//        editor.apply();
-    }
 }
