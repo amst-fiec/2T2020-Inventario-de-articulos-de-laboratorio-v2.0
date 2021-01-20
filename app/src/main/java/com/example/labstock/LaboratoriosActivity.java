@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.labstock.Models.Account;
@@ -34,13 +35,17 @@ public class LaboratoriosActivity extends AppCompatActivity {
     private DatabaseReference db_reference;
 
 
-  private FirebaseUser user;
+    private FirebaseUser user;
+    private LinearLayout contenedor;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_laboratorios);
         context = getApplicationContext();
+        contenedor = (LinearLayout) findViewById(R.id.container_laboratorios);
+        scrollView = (ScrollView) findViewById(R.id.container_laboratorios_hidden_scroll);
 
         db_reference = FirebaseDatabase.getInstance().getReference().child("users");
 
@@ -54,31 +59,35 @@ public class LaboratoriosActivity extends AppCompatActivity {
 
     }
 
-    public void leerRegistros(){
+    public void leerRegistros() {
 
         db_reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    Map<String,Object> data=(Map) snapshot.getValue();
+                    Map<String, Object> data = (Map) snapshot.getValue();
 
 
-                    if(data.get("correo").toString().equals(user.getEmail())){
+                    if (data.get("correo").toString().equals(user.getEmail())) {
 
+                        LinearLayout laboratorios_hidden = (LinearLayout) findViewById(R.id.container_laboratorios_hidden);
+                        laboratorios_hidden.setVisibility(View.GONE);
+                        scrollView.setVisibility(View.VISIBLE);
 
-                        for(Object laboratorio:(List)data.get("laboratorios")){
+                        for (Object laboratorio : (List) data.get("laboratorios")) {
 
-                            insertLaboratorios((Map)laboratorio);
+                            insertLaboratorios((Map) laboratorio);
                         }
                         //Log.d("Labs",data.get("laboratorios").toString());
 
                     }
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError error) {
-                Log.e("Error",error.toException().toString());
+                Log.e("Error", error.toException().toString());
             }
         });
     }
@@ -96,21 +105,21 @@ public class LaboratoriosActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void insertLaboratorios(Map<String,Object> laboratorio){
+    public void insertLaboratorios(Map<String, Object> laboratorio) {
 
-        LinearLayout contenedor = (LinearLayout) findViewById(R.id.container_laboratorios);
 
-       // Button button = (Button) LayoutInflater.from(this).inflate(R.layout.list_item, null);;
-        Button button=new Button(context);
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.list_item, null);
+        ((Button) linearLayout.findViewById(R.id.btn_item)).setText(laboratorio.get("nombre").toString());
+        //Button button = new Button(context);
 
-        button.setText(laboratorio.get("nombre").toString());
-        button.setOnClickListener(view -> {
-        Intent intent=new Intent(context, EquiposActivity.class);
-        //intent.putExtra("data",(Map)laboratorio);
-        startActivity(intent);
+
+        ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
+            Intent intent = new Intent(context, EquiposActivity.class);
+            //intent.putExtra("data",(Map)laboratorio);
+            startActivity(intent);
 
         });
 
-        contenedor.addView(button);
+        contenedor.addView(linearLayout);
     }
 }
