@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -71,8 +72,8 @@ public class LaboratoriosActivity extends AppCompatActivity {
 
                     if (data.get("correo").toString().equals(user.getEmail())) {
 
-                        LinearLayout laboratorios_hidden = (LinearLayout) findViewById(R.id.container_laboratorios_hidden);
-                        laboratorios_hidden.setVisibility(View.GONE);
+                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.lab_progress_loader);
+                        progressBar.setVisibility(View.GONE);
                         scrollView.setVisibility(View.VISIBLE);
 
                         for (Object laboratorio : (List) data.get("laboratorios")) {
