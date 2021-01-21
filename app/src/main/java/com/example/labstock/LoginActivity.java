@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,8 +25,15 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static Helpers.NotificationHelper.CANAL_1_ID;
 
@@ -37,14 +45,13 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
 
 
-    private Context context=this;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = getApplicationContext();
-
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -104,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 FirebaseUser user = mAuth.getCurrentUser();
                 updateUI(user);
+
             } else {
                 System.out.println("error");
                 updateUI(null);
@@ -113,27 +121,40 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            //String name = user.getDisplayName();
-            //String email = user.getEmail();
-            //String photo = String.valueOf(user.getPhotoUrl());
 
-            Toast.makeText(context, "Bienvenido " +  user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Query verifcarUser = FirebaseDatabase.getInstance().getReference().child("users").orderByChild("correo").equalTo(user.getEmail());
+            verifcarUser.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-//            HashMap<String, String> info_user = new HashMap<String, String>();
-//            info_user.put("user_name", user.getDisplayName());
-//            info_user.put("user_email", user.getEmail());
-//            info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
-//            info_user.put("user_id", user.getUid());
-//
-//            if (user.getPhoneNumber() != null) {
-//                info_user.put("user_phone", user.getPhoneNumber());
-//            } else {
-//                info_user.put("user_phone", "No tiene numero celular registrado");
-//            }
+
+                    if (!dataSnapshot.getChildren().iterator().hasNext()) {
+                        ///Insert User
+                        DatabaseReference db_reference = FirebaseDatabase.getInstance().getReference().child("users");
+                        DatabaseReference pushUser = db_reference.push();
+                        String key = pushUser.getKey();
+
+                        Map<String, Object> userData = new HashMap<>();
+
+                        userData.put("correo", user.getEmail());
+                        db_reference.child(key).setValue(userData);
+                        ///
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    Log.e("Error", error.toException().toString());
+                }
+            });
+
+            Toast.makeText(context, "Bienvenido " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
 
 
             Intent intent = new Intent(this, MenuActivity.class);
-            //intent.putExtra("info_user", info_user);
+
             startActivity(intent);
             finish();
 

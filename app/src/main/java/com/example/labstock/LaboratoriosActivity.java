@@ -32,6 +32,8 @@ public class LaboratoriosActivity extends AppCompatActivity {
     private LinearLayout contenedor;
     private ScrollView scrollView;
 
+    private String userRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-
+                    userRef=snapshot.getRef().toString();
                     Iterable<DataSnapshot> labs = snapshot.child("laboratorios").getChildren();
                     for (DataSnapshot lab : labs) {
                         insertLaboratorios(lab);
@@ -90,6 +92,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
     //Crear laboratorio formulario
     public void crearLab(View view) {
         Intent intent = new Intent(context, registro_laboratorio.class);
+        intent.putExtra("user", userRef);
         startActivity(intent);
     }
 
