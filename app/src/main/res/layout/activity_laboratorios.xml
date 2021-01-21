@@ -24,7 +24,7 @@
 
 
     <ProgressBar
-        android:id="@+id/lab_progress_loader"
+        android:id="@+id/labs_progress_loader"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

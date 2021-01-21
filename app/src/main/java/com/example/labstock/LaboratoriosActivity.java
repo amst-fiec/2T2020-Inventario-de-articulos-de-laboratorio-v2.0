@@ -56,8 +56,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
         db_reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ProgressBar progressBar = (ProgressBar) findViewById(R.id.lab_progress_loader);
-                progressBar.setVisibility(View.GONE);
+                ((ProgressBar) findViewById(R.id.labs_progress_loader)).setVisibility(View.GONE);
                 scrollView.setVisibility(View.VISIBLE);
                 contenedor.removeAllViews();
 
