@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,8 +47,9 @@ public class EquipoActivity extends AppCompatActivity {
 
         db_reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("Equipos",dataSnapshot.getRef().toString());
+            public void onDataChange(DataSnapshot equipo) {
+
+                renderData(equipo);
             }
 
             @Override
@@ -57,6 +59,13 @@ public class EquipoActivity extends AppCompatActivity {
         });
     }
 
+    public void renderData(DataSnapshot equipo) {
+        Log.d("Equipos", equipo.getRef().toString());
+        ((TextView) findViewById(R.id.equipo_name)).setText(equipo.child("nombre").getValue().toString());
+        ((TextView) findViewById(R.id.equipo_model)).setText(equipo.child("modelo").getValue().toString());
+        ((TextView) findViewById(R.id.equipo_marca)).setText(equipo.child("marca").getValue().toString());
+        ((TextView) findViewById(R.id.equipo_description)).setText(equipo.child("descripcion").getValue().toString());
+    }
 
     public void prestarEquipo(View view) {
 

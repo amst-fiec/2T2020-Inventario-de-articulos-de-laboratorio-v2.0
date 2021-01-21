@@ -38,6 +38,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/equipo_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -63,6 +64,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/equipo_model"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorGray"
@@ -88,6 +90,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/equipo_marca"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorGray"
@@ -113,6 +116,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/equipo_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorGray"
