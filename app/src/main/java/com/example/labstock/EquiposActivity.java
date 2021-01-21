@@ -110,15 +110,11 @@ public class EquiposActivity extends AppCompatActivity {
         contenedor.addView(linearLayout);
     }
 
-    //Equipo ejemplo
-    public void equipo(View view) {
-        Intent intent = new Intent(context, EquipoActivity.class);
-        startActivity(intent);
-    }
 
     //Crear laboratorio formulario
     public void crearEquipo(View view) {
         Intent intent = new Intent(context, registroEquipo.class);
+        intent.putExtra("lab", labId);
         startActivity(intent);
     }
 
