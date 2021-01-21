@@ -11,15 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -62,7 +59,7 @@ public class EquiposActivity extends AppCompatActivity {
         db_reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                contenedor.removeAllViews();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     DataSnapshot lab = snapshot.child("laboratorios").child(labId);
@@ -80,7 +77,7 @@ public class EquiposActivity extends AppCompatActivity {
     }
 
     private void renderDataInfo(DataSnapshot laboratorio) {
-        ((ProgressBar)findViewById(R.id.lab_progress_loader)).setVisibility(View.GONE);
+        ((ProgressBar) findViewById(R.id.lab_progress_loader)).setVisibility(View.GONE);
         ((LinearLayout) findViewById(R.id.lab_mainContainer)).setVisibility(View.VISIBLE);
         //Toast.makeText(context,laboratorio.child("nombre").getValue().toString(),Toast.LENGTH_SHORT).show();
         ((TextView) findViewById(R.id.lab_name)).setText(laboratorio.child("nombre").getValue().toString());
@@ -94,8 +91,16 @@ public class EquiposActivity extends AppCompatActivity {
 
     private void renderDataEquipos(DataSnapshot equipo) {
 
-        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.list_item, null);
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.list_item_equipo, null);
         ((Button) linearLayout.findViewById(R.id.btn_item)).setText(equipo.child("nombre").getValue().toString());
+
+        if (equipo.child("estado").getValue().toString().equals("0")) {
+            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_ok);
+        } else if (equipo.child("estado").getValue().toString().equals("2")) {
+            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_danger);
+        } else {
+            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
+        }
 
         ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
             Intent intent = new Intent(context, EquipoActivity.class);

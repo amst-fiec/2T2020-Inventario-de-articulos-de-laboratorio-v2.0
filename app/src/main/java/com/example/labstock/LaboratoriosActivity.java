@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.labstock.Models.Account;
-import com.example.labstock.Models.Converter;
-import com.example.labstock.Models.Laboratorio;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,10 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 public class LaboratoriosActivity extends AppCompatActivity {
 
@@ -70,6 +59,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
                 ProgressBar progressBar = (ProgressBar) findViewById(R.id.lab_progress_loader);
                 progressBar.setVisibility(View.GONE);
                 scrollView.setVisibility(View.VISIBLE);
+                contenedor.removeAllViews();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
@@ -110,7 +100,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
     public void insertLaboratorios(DataSnapshot laboratorio) {
 
 
-        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.list_item, null);
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.list_item_lab, null);
         ((Button) linearLayout.findViewById(R.id.btn_item)).setText(laboratorio.child("nombre").getValue().toString());
 
         ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
