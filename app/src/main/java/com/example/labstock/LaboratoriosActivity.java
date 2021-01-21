@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.labstock.Models.Account;
 import com.example.labstock.Models.Converter;
@@ -65,22 +67,21 @@ public class LaboratoriosActivity extends AppCompatActivity {
         db_reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.lab_progress_loader);
+                progressBar.setVisibility(View.GONE);
+                scrollView.setVisibility(View.VISIBLE);
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    Map<String, Object> data = (Map) snapshot.getValue();
 
+                    if (snapshot.child("correo").getValue().toString().equals(user.getEmail())) {
 
-                    if (data.get("correo").toString().equals(user.getEmail())) {
-
-                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.lab_progress_loader);
-                        progressBar.setVisibility(View.GONE);
-                        scrollView.setVisibility(View.VISIBLE);
-
-                        for (Object laboratorio : (List) data.get("laboratorios")) {
-
-                            insertLaboratorios((Map) laboratorio);
+                        Iterable<DataSnapshot> labs = snapshot.child("laboratorios").getChildren();
+                        for (DataSnapshot lab : labs) {
+                            insertLaboratorios(lab);
+                            //Log.d("Lab", lab.toString());
                         }
-                        //Log.d("Labs",data.get("laboratorios").toString());
+
 
                     }
                 }
@@ -106,13 +107,11 @@ public class LaboratoriosActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void insertLaboratorios(Map<String, Object> laboratorio) {
+    public void insertLaboratorios(DataSnapshot laboratorio) {
 
 
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.list_item, null);
-        ((Button) linearLayout.findViewById(R.id.btn_item)).setText(laboratorio.get("nombre").toString());
-        //Button button = new Button(context);
-
+        ((Button) linearLayout.findViewById(R.id.btn_item)).setText(laboratorio.child("nombre").getValue().toString());
 
         ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
             Intent intent = new Intent(context, EquiposActivity.class);
