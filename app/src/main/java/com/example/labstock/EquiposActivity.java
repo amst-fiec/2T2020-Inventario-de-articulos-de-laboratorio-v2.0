@@ -76,7 +76,7 @@ public class EquiposActivity extends AppCompatActivity {
 
     private void renderDataInfo(DataSnapshot laboratorio) {
         ((ProgressBar) findViewById(R.id.lab_progress_loader)).setVisibility(View.GONE);
-        ((ConstraintLayout) findViewById(R.id.lab_mainContainer)).setVisibility(View.VISIBLE);
+        ((LinearLayout) findViewById(R.id.lab_mainContainer)).setVisibility(View.VISIBLE);
         //Toast.makeText(context,laboratorio.child("nombre").getValue().toString(),Toast.LENGTH_SHORT).show();
         ((TextView) findViewById(R.id.lab_name)).setText(laboratorio.child("nombre").getValue().toString());
         ((TextView) findViewById(R.id.lab_description)).setText(laboratorio.child("descripcion").getValue().toString());

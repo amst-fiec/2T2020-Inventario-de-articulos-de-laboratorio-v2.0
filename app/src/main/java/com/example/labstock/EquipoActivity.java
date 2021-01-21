@@ -7,7 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,12 +29,14 @@ public class EquipoActivity extends AppCompatActivity {
     private String equipoId;
     private DatabaseReference db_reference;
     private FirebaseUser user;
+    private LinearLayout contenedorEquipos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_equipo);
         context = getApplicationContext();
+        contenedorEquipos = (LinearLayout) findViewById(R.id.equipo_prestamos);
         Intent intent = getIntent();
         equipoId = intent.getStringExtra("equipo");
 
@@ -62,13 +67,38 @@ public class EquipoActivity extends AppCompatActivity {
     }
 
     public void renderData(DataSnapshot equipo) {
-        ((ConstraintLayout)findViewById(R.id.equipo_mainContainer)).setVisibility(View.VISIBLE);
+        ((LinearLayout) findViewById(R.id.equipo_mainContainer)).setVisibility(View.VISIBLE);
         Log.d("Equipos", equipo.getRef().toString());
         ((TextView) findViewById(R.id.equipo_name)).setText(equipo.child("nombre").getValue().toString());
         ((TextView) findViewById(R.id.equipo_model)).setText(equipo.child("modelo").getValue().toString());
         ((TextView) findViewById(R.id.equipo_marca)).setText(equipo.child("marca").getValue().toString());
         ((TextView) findViewById(R.id.equipo_description)).setText(equipo.child("descripcion").getValue().toString());
         ((TextView) findViewById(R.id.equipo_responsable)).setText(equipo.child("responsable").getValue().toString());
+
+        for (DataSnapshot prestamo : equipo.child("prestamos").getChildren()) {
+            renderDataPrestamo(prestamo);
+        }
+    }
+
+    public void renderDataPrestamo(DataSnapshot prestamo) {
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.list_item_equipo, null);
+        ((Button) linearLayout.findViewById(R.id.btn_item)).setText(prestamo.child("ubicacion").getValue().toString() + ": " + prestamo.child("responsable").getValue().toString());
+        boolean devuelto = Boolean.parseBoolean(prestamo.child("devuelto").getValue().toString());
+
+        if (devuelto) {
+            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_ok);
+        } else {
+            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
+        }
+
+//        ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
+//            Intent intent = new Intent(context, EquipoActivity.class);
+//            intent.putExtra("prestamo", prestamo.getRef().toString());
+//            startActivity(intent);
+//
+//        });
+
+        contenedorEquipos.addView(linearLayout);
     }
 
     public void prestarEquipo(View view) {
