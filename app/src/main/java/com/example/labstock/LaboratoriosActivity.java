@@ -19,12 +19,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class LaboratoriosActivity extends AppCompatActivity {
 
     private Context context;
-    private DatabaseReference db_reference;
+    private Query db_reference;
 
 
     private FirebaseUser user;
@@ -39,13 +40,12 @@ public class LaboratoriosActivity extends AppCompatActivity {
         contenedor = (LinearLayout) findViewById(R.id.container_laboratorios);
         scrollView = (ScrollView) findViewById(R.id.container_laboratorios_hidden_scroll);
 
-        db_reference = FirebaseDatabase.getInstance().getReference().child("users");
-
         // Initialize Firebase Auth
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
-
         user = mAuth.getCurrentUser();
+
+        db_reference = FirebaseDatabase.getInstance().getReference().child("users").orderByChild("correo").equalTo(user.getEmail());
 
         leerRegistros();
 
@@ -64,16 +64,13 @@ public class LaboratoriosActivity extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
 
-                    if (snapshot.child("correo").getValue().toString().equals(user.getEmail())) {
-
-                        Iterable<DataSnapshot> labs = snapshot.child("laboratorios").getChildren();
-                        for (DataSnapshot lab : labs) {
-                            insertLaboratorios(lab);
-                            //Log.d("Lab", lab.toString());
-                        }
-
-
+                    Iterable<DataSnapshot> labs = snapshot.child("laboratorios").getChildren();
+                    for (DataSnapshot lab : labs) {
+                        insertLaboratorios(lab);
+                        //Log.d("Lab", lab.toString());
                     }
+
+
                 }
             }
 
@@ -105,7 +102,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
 
         ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
             Intent intent = new Intent(context, EquiposActivity.class);
-            intent.putExtra("lab", laboratorio.getKey());
+            intent.putExtra("lab", laboratorio.getRef().toString());
             startActivity(intent);
 
         });

@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -25,7 +26,7 @@ public class EquiposActivity extends AppCompatActivity {
 
     private Context context;
 
-    private Query db_reference;
+    private DatabaseReference db_reference;
 
 
     private FirebaseUser user;
@@ -48,7 +49,7 @@ public class EquiposActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         user = mAuth.getCurrentUser();
-        db_reference = FirebaseDatabase.getInstance().getReference().child("users").orderByChild("correo").equalTo(user.getEmail());
+        db_reference = FirebaseDatabase.getInstance().getReferenceFromUrl(labId);
 
         loadData();
 
@@ -58,15 +59,11 @@ public class EquiposActivity extends AppCompatActivity {
 
         db_reference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot lab) {
                 contenedor.removeAllViews();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    DataSnapshot lab = snapshot.child("laboratorios").child(labId);
-                    renderDataInfo(lab);
-                    //Log.d("Equipos", lab.toString());
+                renderDataInfo(lab);
 
-                }
             }
 
             @Override
@@ -104,7 +101,7 @@ public class EquiposActivity extends AppCompatActivity {
 
         ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
             Intent intent = new Intent(context, EquipoActivity.class);
-            intent.putExtra("lab", equipo.getKey());
+            intent.putExtra("equipo", equipo.getRef().toString());
             startActivity(intent);
 
         });
