@@ -115,7 +115,7 @@ public class LaboratoriosActivity extends AppCompatActivity {
 
         ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
             Intent intent = new Intent(context, EquiposActivity.class);
-            //intent.putExtra("data",(Map)laboratorio);
+            intent.putExtra("lab", laboratorio.getKey());
             startActivity(intent);
 
         });
