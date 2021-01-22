@@ -25,6 +25,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class EquiposActivity extends AppCompatActivity {
 
     private Context context;
@@ -98,9 +104,16 @@ public class EquiposActivity extends AppCompatActivity {
         if (equipo.child("estado").getValue().toString().equals("1")) {
             ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_ok);
         } else if (equipo.child("estado").getValue().toString().equals("0")) {
-            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_danger);
+
+
+            if (actualPrestado(equipo.child("prestamos"))) {
+                ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
+            } else {
+                ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_danger);
+            }
+
         } else {
-            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
+            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_danger);
         }
 
         ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
@@ -113,6 +126,49 @@ public class EquiposActivity extends AppCompatActivity {
         contenedor.addView(linearLayout);
     }
 
+    public boolean actualPrestado(DataSnapshot prestamosRef) {
+
+        if (prestamosRef != null) {
+            DataSnapshot lastPrestamo = getLastPrestamo(prestamosRef.getChildren());
+
+            if (lastPrestamo != null) {
+                boolean devuelto = Boolean.parseBoolean(lastPrestamo.child("devuelto").getValue().toString());
+                if (!devuelto) {
+
+                    String fechaDevolucion = lastPrestamo.child("fechaDevolucion").getValue().toString();
+
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+                    try {
+                        Date devolDate = format.parse(fechaDevolucion);
+                        Date currentDate = new Date();
+
+                        Toast.makeText(context, format.format(devolDate), Toast.LENGTH_SHORT).show();
+
+                        if(devolDate.compareTo(currentDate)<0){
+                            return false;
+                        }
+                    } catch (ParseException e) {
+                        Log.d("Lab", e.getMessage());
+                    }
+
+                }
+
+
+            }
+        }
+        return true;
+    }
+
+    public static DataSnapshot getLastPrestamo(Iterable<DataSnapshot> elements) {
+        DataSnapshot lastElement = null;
+
+        for (DataSnapshot element : elements) {
+            lastElement = element;
+        }
+
+        return lastElement;
+    }
 
     //Crear laboratorio formulario
     public void crearEquipo(View view) {
