@@ -94,10 +94,10 @@ public class EquiposActivity extends AppCompatActivity {
 
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.list_item_equipo, null);
         ((Button) linearLayout.findViewById(R.id.btn_item)).setText(equipo.child("nombre").getValue().toString());
-
-        if (equipo.child("estado").getValue().toString().equals("0")) {
+        //1 en lugar, 0 no en lugar
+        if (equipo.child("estado").getValue().toString().equals("1")) {
             ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_ok);
-        } else if (equipo.child("estado").getValue().toString().equals("2")) {
+        } else if (equipo.child("estado").getValue().toString().equals("0")) {
             ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_danger);
         } else {
             ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
