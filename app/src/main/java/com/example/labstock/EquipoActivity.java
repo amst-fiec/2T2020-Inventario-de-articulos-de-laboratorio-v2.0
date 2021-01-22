@@ -1,10 +1,13 @@
 package com.example.labstock;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class EquipoActivity extends AppCompatActivity {
 
@@ -94,15 +98,46 @@ public class EquipoActivity extends AppCompatActivity {
         if (devuelto) {
             ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_ok);
         } else {
-            ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
+
+            String fechaDevolucion = prestamo.child("fechaDevolucion").getValue().toString();
+
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+            try {
+                Date devolDate = format.parse(fechaDevolucion);
+                Date currentDate = new Date();
+
+                if (devolDate.compareTo(currentDate) < 0) {
+                    ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_danger);
+                } else {
+                    ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
+                }
+            } catch (ParseException e) {
+                ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
+                Log.d("Lab", e.getMessage());
+            }
+
         }
 
-//        ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
-//            Intent intent = new Intent(context, EquipoActivity.class);
-//            intent.putExtra("prestamo", prestamo.getRef().toString());
-//            startActivity(intent);
-//
-//        });
+        ((Button) linearLayout.findViewById(R.id.btn_item)).setOnClickListener(view -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Devolución de Equipo")
+                    .setMessage("El equipo fue devuelto ?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            prestamo.child("devuelto").getRef().setValue(true);
+
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //prestamo.child("devuelto").getRef().setValue(false);
+                        }
+                    }).show();
+
+        });
 
         contenedorPrestamos.addView(linearLayout);
     }
@@ -111,7 +146,7 @@ public class EquipoActivity extends AppCompatActivity {
 
         if (equipoDevuelto) {
             Intent intent = new Intent(context, PrestarEquipoActivity.class);
-            intent.putExtra("equipo",equipo_reference.getRef().toString());
+            intent.putExtra("equipo", equipo_reference.getRef().toString());
             startActivity(intent);
         } else {
             Toast.makeText(context, "No se puede prestar", Toast.LENGTH_SHORT).show();
