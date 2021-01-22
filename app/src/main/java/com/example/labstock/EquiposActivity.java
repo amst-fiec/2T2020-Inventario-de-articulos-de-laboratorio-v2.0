@@ -145,13 +145,15 @@ public class EquiposActivity extends AppCompatActivity {
 
                         Toast.makeText(context, format.format(devolDate), Toast.LENGTH_SHORT).show();
 
-                        if(devolDate.compareTo(currentDate)<0){
+                        if (devolDate.compareTo(currentDate) < 0) {
                             return false;
                         }
                     } catch (ParseException e) {
                         Log.d("Lab", e.getMessage());
                     }
 
+                } else {
+                    return false;
                 }
 
 
