@@ -11,13 +11,66 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:gravity="center_horizontal"
+            android:text="Formulario para Prestamo de Equipo"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <EditText
+            android:id="@+id/prestamo_responsable"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:ems="10"
+            android:hint="Ingrese el nombre del Responsable"
+            android:inputType="textPersonName"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text=""
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/prestamo_ubicacion"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:ems="10"
+            android:hint="Ingrese Ubicación del Prestamo"
+            android:inputType="textPersonName"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text=""
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/prestamo_devolucion"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Ingrese Fecha de Devolución"
+            android:inputType="date"
+            android:maxLines="1"
+            android:onClick="selectDate"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_active"
-            android:onClick="saveEquipo"
+            android:onClick="prestarEquipo"
             android:paddingTop="28dp"
             android:paddingBottom="28dp"
             android:text="Prestar"

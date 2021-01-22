@@ -111,6 +111,7 @@ public class EquipoActivity extends AppCompatActivity {
 
         if (equipoDevuelto) {
             Intent intent = new Intent(context, PrestarEquipoActivity.class);
+            intent.putExtra("equipo",equipo_reference.getRef().toString());
             startActivity(intent);
         } else {
             Toast.makeText(context, "No se puede prestar", Toast.LENGTH_SHORT).show();

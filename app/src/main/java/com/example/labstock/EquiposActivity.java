@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class EquiposActivity extends AppCompatActivity {
 
@@ -137,13 +138,11 @@ public class EquiposActivity extends AppCompatActivity {
 
                     String fechaDevolucion = lastPrestamo.child("fechaDevolucion").getValue().toString();
 
-                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
                     try {
                         Date devolDate = format.parse(fechaDevolucion);
                         Date currentDate = new Date();
-
-                        Toast.makeText(context, format.format(devolDate), Toast.LENGTH_SHORT).show();
 
                         if (devolDate.compareTo(currentDate) < 0) {
                             return false;
