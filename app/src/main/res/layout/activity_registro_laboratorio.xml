@@ -76,6 +76,21 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_guardarLabChg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_active"
+            android:onClick="guardarLabChg"
+            android:paddingTop="28dp"
+            android:paddingBottom="28dp"
+            android:text="Guardar Cambios"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
 </ScrollView>

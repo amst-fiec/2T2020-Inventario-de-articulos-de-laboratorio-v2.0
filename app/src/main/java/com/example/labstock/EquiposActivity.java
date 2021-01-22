@@ -1,7 +1,7 @@
 package com.example.labstock;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,27 +13,30 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class EquiposActivity extends AppCompatActivity {
 
     private Context context;
 
-    private DatabaseReference db_reference;
+    private DatabaseReference labRef;
 
 
     private FirebaseUser user;
     String labId;
 
     LinearLayout contenedor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class EquiposActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         user = mAuth.getCurrentUser();
-        db_reference = FirebaseDatabase.getInstance().getReferenceFromUrl(labId);
+        labRef = FirebaseDatabase.getInstance().getReferenceFromUrl(labId);
 
         loadData();
 
@@ -58,7 +61,7 @@ public class EquiposActivity extends AppCompatActivity {
 
     public void loadData() {
 
-        db_reference.addValueEventListener(new ValueEventListener() {
+        labRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot lab) {
                 contenedor.removeAllViews();
@@ -77,10 +80,10 @@ public class EquiposActivity extends AppCompatActivity {
     private void renderDataInfo(DataSnapshot laboratorio) {
         ((ProgressBar) findViewById(R.id.lab_progress_loader)).setVisibility(View.GONE);
         ((LinearLayout) findViewById(R.id.lab_mainContainer)).setVisibility(View.VISIBLE);
-        //Toast.makeText(context,laboratorio.child("nombre").getValue().toString(),Toast.LENGTH_SHORT).show();
-        ((TextView) findViewById(R.id.lab_name)).setText(laboratorio.child("nombre").getValue().toString());
-        ((TextView) findViewById(R.id.lab_description)).setText(laboratorio.child("descripcion").getValue().toString());
-        ((TextView) findViewById(R.id.lab_location)).setText(laboratorio.child("ubicacion").getValue().toString());
+
+        ((TextView) findViewById(R.id.lab_name)).setText((laboratorio.child("nombre") != null) ? laboratorio.child("nombre").getValue().toString() : "");
+        ((TextView) findViewById(R.id.lab_description)).setText((laboratorio.child("descripcion") != null) ? laboratorio.child("descripcion").getValue().toString() : "");
+        ((TextView) findViewById(R.id.lab_location)).setText((laboratorio.child("ubicacion") != null) ? laboratorio.child("ubicacion").getValue().toString() : "");
 
         for (DataSnapshot equipo : laboratorio.child("equipos").getChildren()) {
             renderDataEquipos(equipo);
@@ -116,6 +119,18 @@ public class EquiposActivity extends AppCompatActivity {
         Intent intent = new Intent(context, registroEquipo.class);
         intent.putExtra("lab", labId);
         startActivity(intent);
+    }
+
+    public void editLab(View view) {
+
+        Intent intent = new Intent(context, registro_laboratorio.class);
+        intent.putExtra("nombre", ((TextView) findViewById(R.id.lab_name)).getText());
+        intent.putExtra("ubicacion", ((TextView) findViewById(R.id.lab_location)).getText());
+        intent.putExtra("descripcion", ((TextView) findViewById(R.id.lab_description)).getText());
+        intent.putExtra("lab", labId);
+        startActivity(intent);
+
+
     }
 
 }
