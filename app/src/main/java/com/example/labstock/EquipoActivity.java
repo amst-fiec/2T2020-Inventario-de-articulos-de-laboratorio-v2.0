@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,36 +24,43 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class EquipoActivity extends AppCompatActivity {
 
     private Context context;
     private String equipoId;
-    private DatabaseReference db_reference;
+    private DatabaseReference equipo_reference;
     private FirebaseUser user;
-    private LinearLayout contenedorEquipos;
+    private LinearLayout contenedorPrestamos;
+
+    private Boolean equipoDevuelto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_equipo);
         context = getApplicationContext();
-        contenedorEquipos = (LinearLayout) findViewById(R.id.equipo_prestamos);
+        contenedorPrestamos = (LinearLayout) findViewById(R.id.equipo_prestamos);
         Intent intent = getIntent();
         equipoId = intent.getStringExtra("equipo");
+        equipoDevuelto = false;
 
         // Initialize Firebase Auth
         FirebaseAuth mAuth;
         mAuth = FirebaseAuth.getInstance();
 
         user = mAuth.getCurrentUser();
-        db_reference = FirebaseDatabase.getInstance().getReferenceFromUrl(equipoId);
+        equipo_reference = FirebaseDatabase.getInstance().getReferenceFromUrl(equipoId);
         loadData();
 
     }
 
     public void loadData() {
 
-        db_reference.addValueEventListener(new ValueEventListener() {
+        equipo_reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot equipo) {
                 ((ProgressBar) findViewById(R.id.equipo_progress_loader)).setVisibility(View.GONE);
@@ -74,10 +82,8 @@ public class EquipoActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.equipo_marca)).setText(equipo.child("marca").getValue().toString());
         ((TextView) findViewById(R.id.equipo_description)).setText(equipo.child("descripcion").getValue().toString());
         ((TextView) findViewById(R.id.equipo_responsable)).setText(equipo.child("responsable").getValue().toString());
-
-        for (DataSnapshot prestamo : equipo.child("prestamos").getChildren()) {
-            renderDataPrestamo(prestamo);
-        }
+        contenedorPrestamos.removeAllViews();
+        equipoDevuelto = devuelto(equipo.child("prestamos"));
     }
 
     public void renderDataPrestamo(DataSnapshot prestamo) {
@@ -98,12 +104,44 @@ public class EquipoActivity extends AppCompatActivity {
 //
 //        });
 
-        contenedorEquipos.addView(linearLayout);
+        contenedorPrestamos.addView(linearLayout);
     }
 
     public void prestarEquipo(View view) {
 
-        Intent intent = new Intent(context, PrestarEquipoActivity.class);
-        startActivity(intent);
+        if (equipoDevuelto) {
+            Intent intent = new Intent(context, PrestarEquipoActivity.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(context, "No se puede prestar", Toast.LENGTH_SHORT).show();
+        }
     }
+
+
+    public DataSnapshot getLastPrestamo(Iterable<DataSnapshot> prestamos) {
+        DataSnapshot lastElement = null;
+
+        for (DataSnapshot prestamo : prestamos) {
+            lastElement = prestamo;
+            renderDataPrestamo(prestamo);
+        }
+
+        return lastElement;
+    }
+
+
+    public boolean devuelto(DataSnapshot prestamosRef) {
+
+        if (prestamosRef != null) {
+            DataSnapshot lastPrestamo = getLastPrestamo(prestamosRef.getChildren());
+
+            if (lastPrestamo != null) {
+                boolean devuelto = Boolean.parseBoolean(lastPrestamo.child("devuelto").getValue().toString());
+                return devuelto;
+            }
+        }
+        return true;
+    }
+
+
 }

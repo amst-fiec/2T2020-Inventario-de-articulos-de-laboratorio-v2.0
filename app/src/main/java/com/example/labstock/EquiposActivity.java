@@ -106,7 +106,7 @@ public class EquiposActivity extends AppCompatActivity {
         } else if (equipo.child("estado").getValue().toString().equals("0")) {
 
 
-            if (actualPrestado(equipo.child("prestamos"))) {
+            if (actualLugar(equipo.child("prestamos"))) {
                 ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_warning);
             } else {
                 ((Button) linearLayout.findViewById(R.id.btn_item)).setBackgroundResource(R.drawable.btn_danger);
@@ -126,7 +126,7 @@ public class EquiposActivity extends AppCompatActivity {
         contenedor.addView(linearLayout);
     }
 
-    public boolean actualPrestado(DataSnapshot prestamosRef) {
+    public boolean actualLugar(DataSnapshot prestamosRef) {
 
         if (prestamosRef != null) {
             DataSnapshot lastPrestamo = getLastPrestamo(prestamosRef.getChildren());
