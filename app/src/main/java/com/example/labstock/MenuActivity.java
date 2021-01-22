@@ -1,5 +1,6 @@
 package com.example.labstock;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -11,6 +12,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -18,6 +21,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -31,15 +39,18 @@ public class MenuActivity extends AppCompatActivity {
     private String mensajeNotificacion;
     private FirebaseAuth mAuth;
 
-    private  Context context;
+    private Context context;
     FirebaseUser user;
     private GoogleSignInClient mGoogleSignInClient;
+    private DatabaseReference bateria_reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        context=getApplicationContext();
+        context = getApplicationContext();
+
+        bateria_reference = FirebaseDatabase.getInstance().getReference().child("bateria");
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -53,13 +64,29 @@ public class MenuActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
 
-        Toast.makeText(context,"Bienvenido " +  user.getDisplayName(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Bienvenido " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+        loadBateria();
 
+    }
+
+    private void loadBateria() {
+        bateria_reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                ((TextView) findViewById(R.id.bateria_carga)).setText((snapshot.child("carga").getValue().toString()) + "%");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
     public void laboratorios(View view) {
-        Notification notification= new NotificationCompat.Builder(
+        Notification notification = new NotificationCompat.Builder(
                 this,
                 CANAL_1_ID).setSmallIcon(R.drawable.icono)
                 .setContentTitle(mensajeNotificacion)
@@ -87,7 +114,7 @@ public class MenuActivity extends AppCompatActivity {
 
     }
 
-    public void profile(View view){
+    public void profile(View view) {
 
         HashMap<String, String> info_user = new HashMap<String, String>();
         info_user.put("user_name", user.getDisplayName());
@@ -95,20 +122,19 @@ public class MenuActivity extends AppCompatActivity {
         info_user.put("user_photo", String.valueOf(user.getPhotoUrl()));
 
 
-        if(user.getPhoneNumber()!=null){
-            info_user.put("user_phone",user.getPhoneNumber());
-        }
-        else{
-            info_user.put("user_phone","No tiene numero registrado");
+        if (user.getPhoneNumber() != null) {
+            info_user.put("user_phone", user.getPhoneNumber());
+        } else {
+            info_user.put("user_phone", "No tiene numero registrado");
         }
 
-        Intent intent=new Intent(context,PerfilActivity.class);
+        Intent intent = new Intent(context, PerfilActivity.class);
         intent.putExtra("info_user", info_user);
         startActivity(intent);
     }
 
     public void deleteUser() {
-        Toast.makeText(context,"Regresa Pronto",Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Regresa Pronto", Toast.LENGTH_SHORT).show();
 
 //        SharedPreferences.Editor editor = getSharedPreferences(getString(R.string.preference), MODE_PRIVATE).edit();
 //        editor.remove("userId");
